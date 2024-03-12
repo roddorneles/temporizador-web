@@ -32,7 +32,7 @@ const relogio = {
         relogio.tempoLimite = tempoLimite;
 
         relogio.iniciou = true;
-        relogio.intervalId = setInterval( relogio.atualizaTempo, 10);
+        relogio.intervalId = window.setInterval( relogio.atualizaTempo, 10);
 
     },
     atualizaTempo: function (){
@@ -85,20 +85,24 @@ const relogio = {
             return;
         }        
 
-        relogio.intervalId = setInterval( relogio.atualizaTempo, 10);
+        relogio.intervalId = window.setInterval( relogio.atualizaTempo, 10);
         botaoPause.textContent = "Pause";
         botaoPause.removeEventListener('click', relogio.continua);
         botaoPause.addEventListener('click', relogio.pause);        
     }
-
 };
+
+botaoStart.addEventListener('click', clicaBotaoStart);
+
+botaoPause.addEventListener('click', relogio.pause);
+
+botaoMudaModo.addEventListener('click', clicaBotaoMudaModo);
 
 botoesNumero.forEach( (botao) => {
     botao.addEventListener('click', apertaBotaoNumero);
 });
 
-botaoClean.addEventListener('click', function (event){
-    
+botaoClean.addEventListener('click', function (){
     if (relogio.iniciou){
         console.log("Tecla desabilitada");
         return;
@@ -107,8 +111,6 @@ botaoClean.addEventListener('click', function (event){
     tempoConfig = "0000";
     labelConfiguracaoTempo.textContent = '00:00';
 });
-
-botaoStart.addEventListener('click', clicaBotaoStart);
 
 function clicaBotaoStart(){
     const minutos = parseInt(tempoConfig.slice(0, 2));
@@ -132,7 +134,6 @@ function clicaBotaoStart(){
     botaoStart.textContent = "Stop";
     botaoStart.removeEventListener('click', clicaBotaoStart);
     botaoStart.addEventListener('click', clicaBotaoStop);
-
 }
 
 function clicaBotaoStop(){
@@ -142,11 +143,6 @@ function clicaBotaoStop(){
     botaoPause.removeEventListener('click', relogio.continua);
     botaoPause.addEventListener('click', relogio.pause);            
 }
-
-
-botaoPause.addEventListener('click', relogio.pause);
-
-botaoMudaModo.addEventListener('click', clicaBotaoMudaModo);
 
 function clicaBotaoMudaModo(){
     if (relogio.iniciou){
@@ -163,7 +159,6 @@ function clicaBotaoMudaModo(){
 }
 
 function apertaBotaoNumero(event){
-    
     if (relogio.iniciou){
         console.log("Tecla desabilitada");
         return;
@@ -173,7 +168,7 @@ function apertaBotaoNumero(event){
 
     tempoConfig = tempoConfig + novoDigito;
     tempoConfig = tempoConfig.slice(1, tempoConfig.length);
-    console.log(tempoConfig);
+    console.log(`Botao ${novoDigito}: ${tempoConfig}`);
 
     labelConfiguracaoTempo.textContent = tempoConfig.slice(0, 2) + `:` + tempoConfig.slice(2, 4);
 }
