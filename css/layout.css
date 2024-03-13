@@ -33,6 +33,10 @@
     align-items: flex-start;
 }
 
+.align-end{
+    align-items: end;
+}
+
 .align-stretch{
     align-items: stretch;
 }

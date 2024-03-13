@@ -6,6 +6,112 @@ body{
     flex-direction: row;
     justify-content: center;
     align-items: center;
+
+    background-color: #E6EFF5;
+
+    padding: 100px 0px;
+
+}
+
+.card{
+    width: 635px;;
+    border-radius: 8px;
+    padding-top: 20px;
+    background-color: white;
+}
+
+.background-green{
+    background-color: #2AB3B1;
+    border-end-end-radius: 8px;
+    border-end-start-radius: 8px;
+}
+
+.card__title{
+    font-family: 'Karla', sans-serif;
+    font-weight: bold;
+    font-size: 24px;
+    color: #2AB3B1;
+}
+
+.btn-crono{
+    padding: 15px;
+    border-width: 0px;
+    min-width: 235px;
+    border-radius: 5px;
+    background-color: #E6EFF5;
+    color: #2AB3B1;    
+    font-family: 'Karla', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.0973);
+}
+
+.card__texto-tempo{
+    color: #9AA7BE;    
+    font-family: 'Karla', sans-serif;
+    font-size: 20px;
+    font-weight:normal;
+}
+
+.configuracao-tempo{
+    color: #9AA7BE;    
+    font-family: 'Karla', sans-serif;
+    font-size: 27px;
+    font-weight:normal;
+    border: solid 3px;
+    border-color: rgba(192, 223, 51, 0.35);
+    border-radius: 5px;
+    padding: 9px 12px 10px 12px;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.0973);
+}
+
+.btn-numero, .btn-clean{
+    all: unset;
+    box-sizing: border-box;
+    background-color: #C0DF33;
+    color: white;    
+    font-family: 'Karla', sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 5px;
+    min-width: 40px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.0973);
+}
+
+.label-tempo{
+    font-size: 55px;
+    font-family: 'Karla', sans-serif;
+    color: white;
+}
+
+.card__line{
+    width: 500px;
+    border: 1px solid;
+    border-color: #CAD6E4;
+    
+}
+
+.btn-start, .btn-pause{
+    all: unset;
+    box-sizing: border-box;
+    background-color: #C0DF33;
+    color: white;    
+    text-transform: uppercase;
+    font-family: 'Karla', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 15px;
+    width: 237px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.0973);    
 }
 
 .button{

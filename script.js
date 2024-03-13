@@ -4,7 +4,7 @@ let tempoConfig = "0000";
 const labelTempo = document.querySelector('.label-tempo');
 const labelConfiguracaoTempo = document.querySelector('.configuracao-tempo');
 
-const botoesNumero = document.querySelectorAll('.button-container .btn-numero');
+const botoesNumero = document.querySelectorAll('.btn-numero');
 const botaoClean = document.querySelector('.btn-clean');
 const botaoMudaModo = document.querySelector('.btn-crono');
 const botaoStart = document.querySelector('.btn-start');
@@ -151,10 +151,10 @@ function clicaBotaoMudaModo(){
     }    
     const novoModo = relogio.mudaModo();
     if (novoModo === 'crono'){
-        botaoMudaModo.textContent = 'Crono';
+        botaoMudaModo.textContent = 'CHRONOMETER';
     }
     if (novoModo === 'tempo'){
-        botaoMudaModo.textContent = 'Tempo';
+        botaoMudaModo.textContent = 'TIMER';
     }
 }
 
@@ -170,6 +170,6 @@ function apertaBotaoNumero(event){
     tempoConfig = tempoConfig.slice(1, tempoConfig.length);
     console.log(`Botao ${novoDigito}: ${tempoConfig}`);
 
-    labelConfiguracaoTempo.textContent = tempoConfig.slice(0, 2) + `:` + tempoConfig.slice(2, 4);
+    labelConfiguracaoTempo.textContent = tempoConfig.slice(0, 2) + ` : ` + tempoConfig.slice(2, 4);
 }
 
