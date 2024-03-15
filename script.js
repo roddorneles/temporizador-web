@@ -18,8 +18,11 @@ const botaoPause = document.querySelector('.btn-pause');
 
 const relogio = {
     intervalId: 0,
-    tempo: 0,
+    tempoAtual: 0,
+    tempoInicio: 0,
     tempoLimite: 0,
+    tempoSalvo: 0,
+    ultimaChamada: null,
     iniciou: false,
     modo: 'crono',
     mudaModo: function(){
@@ -33,38 +36,46 @@ const relogio = {
     },
     inicia: function (tempoInicio, tempoLimite){
         
-        relogio.tempo = tempoInicio;
-    
+        relogio.tempoSalvo = 0;
+        relogio.tempoAtual = tempoInicio;
+        relogio.tempoInicio = tempoInicio;
         relogio.tempoLimite = tempoLimite;
+
+        relogio.ultimaChamada = Date.now();
 
         relogio.iniciou = true;
         relogio.intervalId = window.setInterval( relogio.atualizaTempo, 10);
 
     },
-    atualizaTempo: function (){
-        
-        if (relogio.tempo === relogio.tempoLimite){
+    atualizaTempo: function (){       
+
+        const dt = Date.now() - relogio.ultimaChamada;       
+
+        if (relogio.modo === 'crono'){
+            relogio.tempoAtual = relogio.tempoAtual + dt;
+        }
+        else if (relogio.modo === 'tempo'){
+            relogio.tempoAtual = relogio.tempoAtual - dt;
+            //relogio.tempoAtual = relogio.tempoInicio - (relogio.tempoSalvo + dt);
+        }
+        relogio.ultimaChamada = Date.now();
+
+        if (relogio.modo ==='crono' && relogio.tempoAtual >= relogio.tempoLimite){
+            relogio.interrompe();
+        }
+        if (relogio.modo === 'tempo' && relogio.tempoAtual <= 0){
             relogio.interrompe();
             return;
         }
-        
-        let incremento = 0;
 
-        if (relogio.modo === 'crono'){
-            incremento = 10;
+        console.log(relogio.tempoAtual);
+
+        relogio.formatarSegundos();
+
+        if (relogio.modo ==='crono' && Math.floor(relogio.tempoAtual/1000)*1000 >= relogio.tempoLimite){
+            relogio.interrompe();
         }
-        else if (relogio.modo === 'tempo'){
-            incremento = -10;
-        }
 
-        relogio.tempo = relogio.tempo + incremento;
-
-        const centesimoSegundo = (relogio.tempo/10)%100;
-        const segundo = Math.floor(relogio.tempo/1000)%60;
-        const minuto = Math.floor((relogio.tempo/1000)/60);
-    
-        labelTempo.textContent = `${minuto}`.padStart(2, '0') + ` : ` + `${segundo}`.padStart(2,'0') + ` : ` + `${centesimoSegundo}`.padStart(2,0) ;
-        
         //labelTempoMinuto.textContent = `${minuto}`.padStart(2, '0');
         //labelTempoSegundo.textContent = `${segundo}`.padStart(2,'0');
         //labelTempoCentSegundo.textContent = `${centesimoSegundo}`.padStart(2,0);
@@ -77,33 +88,25 @@ const relogio = {
         botaoStart.removeEventListener('click', clicaBotaoStop );
         botaoStart.addEventListener('click', clicaBotaoStart);    
     },
+    formatarSegundos: function(){
+        const centesimoSegundo = Math.floor((relogio.tempoAtual%1000)/10);
+        const segundo = Math.floor(relogio.tempoAtual/1000)%60;
+        const minuto = Math.floor((relogio.tempoAtual/1000)/60);
+    
+        labelTempo.textContent = `${minuto}`.padStart(2, '0') + ` : ` + `${segundo}`.padStart(2,'0') + ` : ` + `${centesimoSegundo}`.padStart(2,0) ;        
+    },
     pause: function (){
-        if (!relogio.iniciou){
-            console.log("Tecla desabilitada");
-            return;
-        }
-
         window.clearInterval(relogio.intervalId);
-        botaoPause.textContent = "Run";
-        botaoPause.removeEventListener('click', relogio.pause);
-        botaoPause.addEventListener('click', relogio.continua);    
     },
     continua: function (){
-        if (!relogio.iniciou){
-            console.log("Tecla desabilitada");
-            return;
-        }        
-
+        relogio.ultimaChamada = Date.now();
         relogio.intervalId = window.setInterval( relogio.atualizaTempo, 10);
-        botaoPause.textContent = "Pause";
-        botaoPause.removeEventListener('click', relogio.continua);
-        botaoPause.addEventListener('click', relogio.pause);        
     }
 };
 
 botaoStart.addEventListener('click', clicaBotaoStart);
 
-botaoPause.addEventListener('click', relogio.pause);
+botaoPause.addEventListener('click', clicaBotaoPause);
 
 botaoMudaModo.addEventListener('click', clicaBotaoMudaModo);
 
@@ -140,11 +143,9 @@ function clicaBotaoStart(){
     }
 
     if (relogio.modo === 'crono'){
-        //labelTempo.textContent = `00 : 00 : 00`;
         relogio.inicia(0, tempoConfiguradoEmMs);
     }
     else if(relogio.modo === 'tempo'){
-        //labelTempo.textContent = `00 : 00 : 00`;
         relogio.inicia(tempoConfiguradoEmMs, 0);
     }
 
@@ -158,8 +159,32 @@ function clicaBotaoStop(){
     relogio.interrompe();
 
     botaoPause.textContent = "Pause";
-    botaoPause.removeEventListener('click', relogio.continua);
-    botaoPause.addEventListener('click', relogio.pause);            
+    botaoPause.removeEventListener('click', clicaBotaoRun);
+    botaoPause.addEventListener('click', clicaBotaoPause);            
+}
+
+function clicaBotaoRun(){
+    if (!relogio.iniciou){
+        console.log("Tecla desabilitada");
+        return;
+    }
+    console.log("Run");
+    relogio.continua();
+    botaoPause.textContent = "Pause";
+    botaoPause.removeEventListener('click', clicaBotaoRun);
+    botaoPause.addEventListener('click', clicaBotaoPause);
+}
+
+function clicaBotaoPause(){
+    if (!relogio.iniciou){
+        console.log("Tecla desabilitada");
+        return;
+    }
+    console.log("Pause");
+    relogio.pause();
+    botaoPause.textContent = "Run";
+    botaoPause.removeEventListener('click', clicaBotaoPause);
+    botaoPause.addEventListener('click', clicaBotaoRun);
 }
 
 function clicaBotaoMudaModo(){
@@ -193,3 +218,8 @@ function apertaBotaoNumero(event){
     labelConfiguracaoTempo.textContent = tempoConfig.slice(0, 2) + ` : ` + tempoConfig.slice(2, 4);
 }
 
+/*
+Olá, professor.
+
+Bom, para fazer o EP01 usei meus conhecimentos de HTML, CSS e JS que eu já tinha previamente. No entanto, na monitoria de hoje, percebi que o monitor usou Date.now() e AnimationFrame para mostrar como poderia ser feito pra solucionar o EP. Seria um problema eu entregar o EP sem usas essas funções e usando a função setInterval? Grato!
+*/
