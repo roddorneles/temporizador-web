@@ -1,5 +1,6 @@
 
 let tempoConfig = "0000";
+let tempoAcumulado = 0;
 
 const labelTempo = document.querySelector('.label-tempo');
 const labelTempoMinuto = document.querySelector('.label-minuto');
@@ -58,12 +59,12 @@ const relogio = {
 
         relogio.tempo = relogio.tempo + incremento;
 
-
         const centesimoSegundo = (relogio.tempo/10)%100;
         const segundo = Math.floor(relogio.tempo/1000)%60;
         const minuto = Math.floor((relogio.tempo/1000)/60);
     
         labelTempo.textContent = `${minuto}`.padStart(2, '0') + ` : ` + `${segundo}`.padStart(2,'0') + ` : ` + `${centesimoSegundo}`.padStart(2,0) ;
+        
         //labelTempoMinuto.textContent = `${minuto}`.padStart(2, '0');
         //labelTempoSegundo.textContent = `${segundo}`.padStart(2,'0');
         //labelTempoCentSegundo.textContent = `${centesimoSegundo}`.padStart(2,0);
@@ -121,8 +122,16 @@ botaoClean.addEventListener('click', function (){
 });
 
 function clicaBotaoStart(){
-    const minutos = parseInt(tempoConfig.slice(0, 2));
-    const segundos = parseInt (tempoConfig.slice(2, 4));
+    console.log("Start");
+    let minutos = parseInt(tempoConfig.slice(0, 2));
+    let segundos = parseInt (tempoConfig.slice(2, 4));
+
+    if (minutos > 59){
+        minutos = 59;
+    }
+    if (segundos > 59){
+        segundos = 59;
+    }
 
     const tempoConfiguradoEmMs = minutos * 60 * 1000 + segundos * 1000;
 
@@ -145,6 +154,7 @@ function clicaBotaoStart(){
 }
 
 function clicaBotaoStop(){
+    console.log("Stop");
     relogio.interrompe();
 
     botaoPause.textContent = "Pause";
@@ -159,9 +169,11 @@ function clicaBotaoMudaModo(){
     }    
     const novoModo = relogio.mudaModo();
     if (novoModo === 'crono'){
+        console.log("Crono");
         botaoMudaModo.textContent = 'CHRONOMETER';
     }
     if (novoModo === 'tempo'){
+        console.log("Timer");
         botaoMudaModo.textContent = 'TIMER';
     }
 }
