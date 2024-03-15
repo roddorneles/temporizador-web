@@ -2,12 +2,17 @@
 let tempoConfig = "0000";
 
 const labelTempo = document.querySelector('.label-tempo');
+const labelTempoMinuto = document.querySelector('.label-minuto');
+const labelTempoSegundo = document.querySelector('.label-segundo');
+const labelTempoCentSegundo = document.querySelector('.label-centesimo-segundo');
+
 const labelConfiguracaoTempo = document.querySelector('.configuracao-tempo');
 
 const botoesNumero = document.querySelectorAll('.btn-numero');
 const botaoClean = document.querySelector('.btn-clean');
 const botaoMudaModo = document.querySelector('.btn-crono');
 const botaoStart = document.querySelector('.btn-start');
+
 const botaoPause = document.querySelector('.btn-pause');
 
 const relogio = {
@@ -53,13 +58,16 @@ const relogio = {
 
         relogio.tempo = relogio.tempo + incremento;
 
-        console.log(relogio.tempo)
 
         const centesimoSegundo = (relogio.tempo/10)%100;
         const segundo = Math.floor(relogio.tempo/1000)%60;
         const minuto = Math.floor((relogio.tempo/1000)/60);
     
         labelTempo.textContent = `${minuto}`.padStart(2, '0') + ` : ` + `${segundo}`.padStart(2,'0') + ` : ` + `${centesimoSegundo}`.padStart(2,0) ;
+        //labelTempoMinuto.textContent = `${minuto}`.padStart(2, '0');
+        //labelTempoSegundo.textContent = `${segundo}`.padStart(2,'0');
+        //labelTempoCentSegundo.textContent = `${centesimoSegundo}`.padStart(2,0);
+        
     },
     interrompe: function (){
         window.clearInterval(relogio.intervalId);
@@ -109,7 +117,7 @@ botaoClean.addEventListener('click', function (){
     }    
     
     tempoConfig = "0000";
-    labelConfiguracaoTempo.textContent = '00:00';
+    labelConfiguracaoTempo.textContent = '00 : 00';
 });
 
 function clicaBotaoStart(){
@@ -123,11 +131,11 @@ function clicaBotaoStart(){
     }
 
     if (relogio.modo === 'crono'){
-        labelTempo.textContent = `00 : 00 : 00`;
+        //labelTempo.textContent = `00 : 00 : 00`;
         relogio.inicia(0, tempoConfiguradoEmMs);
     }
     else if(relogio.modo === 'tempo'){
-        labelTempo.textContent = `00 : 00 : 00`;
+        //labelTempo.textContent = `00 : 00 : 00`;
         relogio.inicia(tempoConfiguradoEmMs, 0);
     }
 
