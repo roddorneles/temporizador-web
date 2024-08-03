@@ -58,6 +58,7 @@ const relogio = {
             relogio.interrompe();
         }
         if (relogio.modo === 'tempo' && relogio.tempoAtual <= 0) {
+            relogio.tempoAtual = 0;
             relogio.interrompe();
             return;
         }
