@@ -45,6 +45,7 @@ const relogio = {
     atualizaTempo: function () {
 
         const dt = Date.now() - relogio.ultimaChamada;
+        console.log('dt: ' + dt);
 
         if (relogio.modo === 'crono') {
             relogio.tempoAtual = relogio.tempoAtual + dt;
@@ -60,7 +61,6 @@ const relogio = {
         if (relogio.modo === 'tempo' && relogio.tempoAtual <= 0) {
             relogio.tempoAtual = 0;
             relogio.interrompe();
-            return;
         }
 
         console.log(relogio.tempoAtual);
